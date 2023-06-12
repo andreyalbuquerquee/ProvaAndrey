@@ -21,12 +21,6 @@ public class App {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         List<Product> productList = new ArrayList<>();
         List<Sale> salesList = new ArrayList<>();
-        
-        
-        
-        
-
-
 
         do {
             System.out.println("\n****\nMENU\n****\n");
@@ -52,13 +46,10 @@ public class App {
                 int stock = in.nextInt();
                 in.nextLine();
 
-                productList.add(new Product(name, code, price, stock));
+                productList.add(new Product(name, code, price, stock)); // Adiciona o produto
                 System.out.println("Produto cadastrado com sucesso. \n");
                 
                 backMenu(in);
-
-
-
                 break;
                 case 2:
                 System.out.println("Informe o código do produto: \n");
@@ -72,12 +63,14 @@ public class App {
                 } else {
                     System.out.println(informedProduct.get(0));
                 }
-                
                 in.nextLine();
                 backMenu(in);
 
                 break;
                 case 3:
+                if (productList.isEmpty()) { // Verifica se há produtos
+                    System.out.println("Não há produtos!");
+                } else {
                 System.out.println("\n****\nProdutos\n****\n");
 
                 for (Product produto : productList) {
@@ -86,20 +79,18 @@ public class App {
 
                 DoubleSummaryStatistics prices = productList.stream()
                 .collect(Collectors.summarizingDouble(Product::getPrice)); // Pega os preços e taca em um array
-                System.out.println("Média dos preços: R$" + prices.getAverage() + "\n");
-                System.out.println("Maior preço: R$" + prices.getMax() + "\n");
-                System.out.println("Menor preço: R$" + prices.getMin() + "\n");
-
-                
+                System.out.println("Média dos preços: R$" + prices.getAverage() + "\n"); // Tira a média
+                System.out.println("Maior preço: R$" + prices.getMax() + "\n"); //Valor máximo
+                System.out.println("Menor preço: R$" + prices.getMin() + "\n"); //Valor mínimo
+                }
                 in.nextLine();
                 backMenu(in);
 
                 break;
                 case 4:
                 if (salesList.isEmpty()) {
-                    System.out.println("Não foram feitas vendas por enquanto.");
+                    System.out.println("Não foram feitas vendas por enquanto."); //Verifica se há vendas
                 } else {
-
                 System.out.println("Informe a data inicial\n");
                 LocalDate initialDate = LocalDate.parse(in.next(),dateFormatter);
                 in.nextLine();
@@ -120,15 +111,18 @@ public class App {
                         totalValue += sale.getValueSold();
                     }
                 }
+                
+                if (periodSales.isEmpty()) {
+                    System.out.println("Não foram feitas vendas nesse período"); // Verifica se há vendas nesse período
+                } else {
+
                 int lengthSales = periodSales.size();
                 Double average = totalValue / lengthSales;
-                System.out.println("A média das vendas é: " + average);
-                
+                System.out.println("A média das vendas é: " + average); // Média das vendas do período
                 }
-
+                }
                 backMenu(in);
 
-                
                 break;
                 case 5:
                 System.out.println("Informe o código do produto vendido\n");
@@ -154,7 +148,7 @@ public class App {
                     Double valueSold = price * uniSolds;
                     in.nextLine();
                     
-                    if (uniSolds > productSold.getStock()){
+                    if (uniSolds > productSold.getStock()){ // Verifica se há produtos o suficiente em estoque para vender
                         System.out.println("Não há produtos o suficiente em estoque \n");
                     } else {
                         Sale sale = new Sale(productSold, saleDate, uniSolds, valueSold);
@@ -164,7 +158,6 @@ public class App {
                         System.out.println("Parabéns pela venda!! \n");
                     }
                 }
-
                 in.nextLine();
                 backMenu(in);
 
@@ -175,14 +168,10 @@ public class App {
                 break;
                 default:
                 System.out.println("Opção inválida! \n");
-
-
             }
 
         } while(option != 0);
-
     }
-
 
     private static void backMenu(Scanner in) throws InterruptedException, IOException {
         System.out.println("\nPressione ENTER para voltar ao menu.");
